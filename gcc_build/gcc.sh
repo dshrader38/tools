@@ -1,5 +1,7 @@
-VERSION=4.8.3
-PREFIX=/usr/local/gcc-$(VERSION)
+#! /bin/bash
+
+VERSION=4.9.2
+PREFIX=/usr/local/gcc-$VERSION
 LANGUAGES=c,c++,fortran
 MAKE='make -j 4' # to compile using four cores
 
@@ -14,11 +16,14 @@ brew install libmpc
 # Download & install the latest GCC
 
 mkdir -p $PREFIX
-mkdir temp-gcc
-cd temp-gcc
-wget ftp://ftp.gnu.org/gnu/gcc/gcc-$VERSION/gcc-$VERSION.tar.gz
-tar xfz gcc-$VERSION.tar.gz
-rm gcc-$VERSION.tar.gz
+mkdir -p temp-gcc-$VERSION
+cd temp-gcc-$VERSION
+if [ "$1" = "-d" ]
+    then
+        wget ftp://ftp.gnu.org/gnu/gcc/gcc-$VERSION/gcc-$VERSION.tar.gz
+        tar xfz gcc-$VERSION.tar.gz
+fi
+
 cd gcc-$VERSION
 
 mkdir build
@@ -41,5 +46,5 @@ $MAKE bootstrap
 make install
 
 # Uncomment for cleanup …
-# cd ../../..
-# rm -r temp-gccjj
+cd ../../..
+# rm -rf temp-gcc-$VERSION
